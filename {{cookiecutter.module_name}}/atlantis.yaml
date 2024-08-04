@@ -1,0 +1,17 @@
+version: 3
+projects:
+- name: {{ cookiecutter.module_name }}
+  dir: .
+  workflow: terratest
+workflows:
+  terratest:
+    plan:
+      steps:
+      - init
+      - plan
+    apply:
+      steps:
+      - apply
+    policy_check:
+      steps:
+      - run: terraform-compliance -f compliance

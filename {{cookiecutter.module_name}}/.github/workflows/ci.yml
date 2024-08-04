@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install pre-commit
+        pre-commit install-hooks
+        go get -u github.com/gruntwork-io/terratest/modules/terraform
+        go get -u github.com/stretchr/testify/assert
+
+    - name: Run pre-commit
+      run: pre-commit run --all-files
+
+    - name: Run Terratest
+      run: go test -v ./test
+
+    - name: Run Terraform Compliance
+      run: terraform-compliance -f compliance
