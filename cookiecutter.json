@@ -1,6 +1,4 @@
 {
     "module_name": "my_terraform_module",
-    "description": "A short description of the module",
-    "variable1": "default_value1",
-    "variable2": "default_value2"
+    "description": "A short description of the module"
 }
